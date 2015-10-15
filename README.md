@@ -78,13 +78,15 @@ class product_proto extends protox
 		'picture' => 'string|optional'
 	);
 }
+
 //mylist.php
 class mylist_protocol extends protox
 {
+	//如果product不需要共用，只在这个类里有效，那么你可以把product_proto复制到这个文件即可，省去了为了一个复杂的类型创建很多文件
 	protected $fields = 'array.product';
 }
 ```
 目前可以支持的类型:int,double,string,array,object    
 同时array和object可以有子类型，当然也可以没有,如果子类型为空，那么数据将原样添加到数组里.    
 比如：array.int表示是一个数组，并且每个元素是int, 输出的数据key从0开始(如果你输入的数据是带key，这个key将会被忽略).   
-那么object.product,表示一个对像，每个成员类型是product,那么key就是你输入参数是的key.   
+那么object.product,表示一个对像，每个成员类型是product,那么key就是输入参数对应的key.   

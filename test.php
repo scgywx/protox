@@ -11,7 +11,17 @@ $input = array(
 	'name' => 'test',
 	'age' => '123a',
 	'qq' => 123456,
-	'phone' => 111
+	'phone' => 111,
+	'family' => array(
+		array(
+			'type' => 'father',
+			'name' => "test's Dad",
+		),
+		array(
+			'type' => 'mother',
+			'name' => "test's Mam"
+		)
+	)
 );
 $output = protox::make('person', $input);
 var_dump($output);

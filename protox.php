@@ -40,11 +40,15 @@ class protox
 			self::$defaultValues['object'] = new stdClass();
 		}
 		
-		require_once(self::$path . "/$name.php");
 		$clsname = "{$name}_protocol";
+		if(!class_exists($clsname, false)){
+			require(self::$path . "/$name.php");
+		}
+		
 		if(!class_exists($clsname)){
 			throw new Exception("Protocol not defined, name=$name");
 		}
+		
 		$cls = new $clsname($data);
 		return $cls->getData();
 	}
@@ -67,16 +71,7 @@ class protox
 		$data = array();
 		foreach($this->fields as $k => $v){
 			$opt = $this->parseOption($v);
-			if(isset($this->input[$k])){
-				$func = self::$convertFunc[$opt['type']];
-				if($func){
-					//类型转换
-					$output = $func($this->input[$k], $opt);
-				}else{
-					//引用类型
-					$output = self::make($opt['type'], $this->input[$k]);
-				}
-			}else{
+			if(empty($this->input[$k])){
 				if(!empty($opt['optional'])){
 					//可选项处理
 					continue;
@@ -86,6 +81,15 @@ class protox
 				}else{
 					//引用空值处理
 					$output = self::make($opt['type'], null);
+				}
+			}else{
+				$func = self::$convertFunc[$opt['type']];
+				if($func){
+					//类型转换
+					$output = $func($this->input[$k], $opt);
+				}else{
+					//引用类型
+					$output = self::make($opt['type'], $this->input[$k]);
 				}
 			}
 			
